@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<style>
+{% load static %}
+ body{
+     background: no-repeat url({% static "shop/img1.jpg" %});
+     background-size: cover;
+     }
+    {% block css %}{% endblock %}
+</style>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#" style="font-size:30px;">MyShop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/shop" style="font-size:20px;">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/shop/about" style="font-size:20px;">About</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/shop/contact" style="font-size:20px;">Contact</a>
+      </li>
+         <li class="nav-item">
+        <a class="nav-link" href="/shop/tracker" style="font-size:20px;">Tracker</a>
+      </li>
+    </ul>
+    <form class="navbar-form navbar-right " action="/shop/search/" method="get">
+        <div class="input-group">
+             <input type="text" class="form-control" name="search" placeholder="Search">
+            <div class="input-group-btn">
+                    <button class="btn btn-danger" type="submit" style="height:34px;">
+                    <i class="glyphicon glyphicon-search"></i></button>
+             </div>
+         </div>
+    </form>
+
+            <button type="button" class="btn btn-success"
+                  data-toggle="modal" data-target="#myModal" style="margin-left:20px;border-radius: 7px;">
+                        <i class="glyphicon glyphicon-shopping-cart"></i> (<span id="cart"></span>)</button>
+
+
+
+  </div>
+</nav>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal" role="dialog" >
+
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">Cart</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+      </div>
+      <div class="modal-body">
+
+            <span id="prodt">
+            </span>
+
+      </div>
+     <div class="footer" style="  margin-top: 20px; margin-bottom: 20px;">
+          <div class="row">
+               <div class="col-lg-12">
+                        <a href="/shop/checkout" type="button" class="btn btn-primary checkout"  style="margin-left: 20px;">Checkout</a>
+                        <button type="button" class="btn btn-primary" class="clearcart" onclick="clearcart()" style="  margin-left: 20px;">Clear Cart</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="  margin-left: 200px;">Close</button>
+               </div>
+          </div>
+     </div>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+
+    {% block body %}{% endblock %}
+
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+<script>
+
+ {% block js %} {% endblock %}
+
+ </script>
+</body>
+</html>
+

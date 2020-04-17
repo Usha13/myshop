@@ -1,0 +1,119 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Checkout {% endblock %}
+{% block body %}
+<div class="container">
+<h3>Your Cart: </h3>
+<ul class="list-group" id="cartlist">
+
+</ul>
+
+    <ul class="list-group" id="totalprice">
+
+    </ul>
+
+
+    <h3>Customer Details : </h3>
+
+    <form action="/shop/checkout/" method="post">{% csrf_token %}
+         <input type="hidden" id="itemjson" name="itemjson">
+         <input type="hidden" id="tprice" name="tprice">
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+    </div>
+
+      <div class="form-group col-md-6">
+       <label for="phone">Phone</label>
+       <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone">
+     </div>
+
+
+  </div>
+
+        <div class="form-group ">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+    </div>
+
+        <div class="form-group">
+    <label for="address1">Address</label>
+    <input type="text" class="form-control" id="address1" name="address1" placeholder="1234 Main St">
+  </div>
+
+  <div class="form-group">
+    <label for="address2">Address Line 2</label>
+    <input type="text" class="form-control" id="address2" name="address2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="city">City</label>
+      <input type="text" class="form-control" id="city" name="city">
+    </div>
+    <div class="form-group col-md-4">
+       <label for="state">State</label>
+        <input type="text" class="form-control" id="state" name="state">
+    </div>
+
+    <div class="form-group col-md-2">
+      <label for="zip">Zip</label>
+      <input type="text" class="form-control" id="zip" name="zip">
+     </div>
+  </div>
+
+
+  <button type="submit" class="btn btn-primary">Place Order</button>
+</form>
+
+
+</div>
+{% endblock %}
+
+
+{% block js %}
+if(localStorage.getItem('cart') == null)
+{
+ var cart = {};
+}
+else
+{
+  cart = JSON.parse(localStorage.getItem('cart'));
+}
+
+console.log(cart);
+    total = 0;
+    sum = 0;
+if($.isEmptyObject(cart)){
+     liststr = "<p>Your Cart is Empty.</p>";
+     $('#cartlist').append(liststr);
+}
+
+else{
+
+   for(var item in cart){
+        var name = cart[item][1];
+        var qty = cart[item][0];
+        var price = cart[item][2];
+        var tprice = qty * price;
+        total = total + tprice;
+        sum = sum + qty;
+        liststr = "<li class='list-group-item d-flex justify-content-between align-items-center'><h4>" + name + "</h4> <h4> Rs. " + tprice + "</h4><span class='badge badge-primary badge-pill'>" + qty + "</span></li>";
+        $('#cartlist').append(liststr);
+
+      }
+}
+tpstr = "<li class='list-group-item d-flex justify-content-between align-items-center'><h3>Total Price : Rs. <span id='tamount'>" + total +"</span>/-</h3></li>";
+    $('#totalprice').append(tpstr);
+console.log(total);
+$('#itemjson').val(JSON.stringify(cart));
+$('#tprice').val(total);
+
+{% if thank %}
+alert('Thanks for Ordering with us . Your Order Id is {{id}}. Remember it and Track your Order. ');
+localStorage.clear();
+document.location = "/shop";
+
+{% endif %}
+
+ {% endblock %}

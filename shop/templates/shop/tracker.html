@@ -1,0 +1,98 @@
+{% extends 'shop/basic.html' %}
+{% block title %} Tracker {% endblock %}
+
+{% block body %}
+ <div class="container">
+<form id="trackorder" method="post">{% csrf_token %}
+
+    <h3>Enter your Order Id and Email to track your Order.</h3>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+         <label for="orderid">Order Id</label>
+      <input type="text" class="form-control" id="orderid" name="orderid" placeholder="Enter Order Id">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email">
+    </div>
+  </div>
+
+    <button type="submit"  class="btn btn-primary">Track Order</button>
+
+</form>
+
+     <h3>Tracker:  </h3>
+<ul class="list-group" id="tracker">
+
+</ul>
+
+     <h3>Your Order:  </h3>
+<ul class="list-group" id="orderlist">
+
+</ul>
+
+
+ </div>
+{% endblock %}
+
+
+{% block js %}
+$('#trackorder').submit(function(event){
+       $('#tracker').empty();
+       var fdata = {
+                'orderid': $('input[name= orderid]').val(),
+                'email': $('input[name= email]').val(),
+                'csrfmiddlewaretoken': $('input[name= csrfmiddlewaretoken]').val()
+          }
+
+       $.ajax({
+                    type: 'POST',
+                    url: '/shop/tracker/',
+                    data: fdata,
+                    encode : true
+              })
+
+       .done(function(data){
+                $('#orderlist').empty();
+                 console.log(data);
+                 data = JSON.parse(data);
+
+                 if(data['status'] == 'Success'){
+                        updates = data['updates'];
+
+                       for(i=0; i< updates.length; i++)
+                       {
+                            var text = updates[i]['text'];
+                            var time = updates[i]['time'];
+                            mystr = "<li class='list-group-item d-flex justify-content-between align-items-center'><h4>" + text + "</h4> <span class='badge badge-primary badge-pill'>" + time + "</span></li><h3>------></h3>";
+                            $('#tracker').append(mystr);
+
+                       }
+
+                 order = JSON.parse(data['itemjson']);
+                console.log(order);
+                for(item in order){
+                        var name = order[item][1];
+                        var qty =  order[item][0];
+                        var price = order[item][2];
+                        var tprice = qty * price;
+
+                        lstr = "<li class='list-group-item d-flex justify-content-between align-items-center'><h4>" + name + "</h4> <h4> Rs. " + tprice + "</h4><span class='badge badge-primary badge-pill'>" + qty + "</span></li>";
+                        $('#orderlist').append(lstr);
+                    }
+
+                 }
+                 else
+                  {
+                         mystr = "<li class='list-group-item d-flex justify-content-between align-items-center'><h4>Sorry, we are not able to track your order . Please Check Order Id and Email is correct.</h4></li>";
+                            $('#tracker').append(mystr);
+                  }
+
+
+ });
+
+  event.preventDefault();
+});
+
+{% endblock %}

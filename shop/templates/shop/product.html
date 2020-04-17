@@ -1,0 +1,66 @@
+{% extends 'shop/basic.html' %}
+{% block title %} {{product.pname}} {% endblock %}
+
+{% block css %}
+  img{
+      width: 400px;
+      height: 400px;
+    }
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="row">
+            <img src="/media/{{product.pimage}}" alt="{{product.pname}}">
+            </div>
+            <br><br>
+            <div class="row">
+            <a href="#" id="addcart" class="addcart btn btn-primary" style="margin-left:70px;">Add to Cart</a>
+            <a href="/shop/checkout2/{{product.id}}" id="buy" class="buy btn btn-primary" style="margin-left:30px;">Buy Now</a>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-8 col-sm-12">
+
+                <h1>{{product.pname}}</h1>
+                <h3>Category: {{product.pcategory}}</h3>
+                <h2>Price: {{product.prod_price}}/-</h2>
+                <h3>Description : {{product.pdesc}}</h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+if(localStorage.getItem('cart')==null)
+{
+ var cart = {};
+}
+else
+{
+ var cart = JSON.parse(localStorage.getItem('cart'));
+}
+
+$('.addcart').click(function(){
+        console.log("clicked");
+        var idstr = this.id.toString();
+        if(cart[idstr]!= undefined)
+        {
+            cart[idstr] = cart[idstr]+1
+        }
+        else
+        {
+         cart[idstr] = 1
+        }
+        localStorage.setItem('cart',JSON.stringify(cart));
+
+});
+
+{% endblock %}
